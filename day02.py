@@ -5,26 +5,19 @@ def check_report(levels):
 
 
 with open("day02.txt", "rt") as fl:
-
-    reports = []
-    for line in fl.readlines():
-        levels = list(map(int, line.strip().split()))
-        reports.append(levels)
-
     safe1 = 0
     safe2 = 0
 
-    for report in reports:
-        is_safe = check_report(report)
+    for line in fl.readlines():
+        report = list(map(int, line.strip().split()))
 
-        if is_safe:
+        if check_report(report):
             safe1 += 1
             safe2 += 1
         else:
             for i in range(len(report)):
                 new_report = report[:i] + report[i+1:]
-                is_safe = check_report(new_report)
-                if is_safe:
+                if check_report(new_report):
                     safe2 += 1
                     break
 
