@@ -8,17 +8,14 @@ with open("day02.txt", "rt") as fl:
     safe1 = 0
     safe2 = 0
 
-    for line in fl.readlines():
+    for line in fl:
         report = list(map(int, line.strip().split()))
 
         if check_report(report):
             safe1 += 1
             safe2 += 1
         else:
-            for i in range(len(report)):
-                new_report = report[:i] + report[i+1:]
-                if check_report(new_report):
-                    safe2 += 1
-                    break
+            if any(check_report(report[:i] + report[i+1:]) for i in range(len(report))):
+                safe2 += 1
 
     print(safe1, safe2)

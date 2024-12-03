@@ -16,5 +16,5 @@ print(d)
 
 
 cnt = Counter(l2)
-d = sum([l*cnt[l] for (l, r) in zip(l1, l2)])
+d = sum([l*cnt[l] for l in l1])
 print(d)
