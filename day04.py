@@ -1,5 +1,5 @@
 
-def check_xmas(x, y, dx, dy, data):
+def check_xmas1(x, y, dx, dy, data):
     mask = "XMAS"
     steps = [
         (1, 0), (0, 1), (-1, 0), (0, -1),
@@ -25,10 +25,10 @@ def check_xmas2(x, y, dx, dy, data):
     if data[y][x] != 'A':
         return 0
 
-    if not ((data[y-1][x-1] == 'M' and data[y+1][x+1] == 'S') or (data[y-1][x-1] == 'S' and data[y+1][x+1] == 'M')):
+    if not ((data[y-1][x-1], data[y+1][x+1]) in (('M', 'S'), ('S', 'M'))):
         return 0
 
-    if not ((data[y-1][x+1] == 'M' and data[y+1][x-1] == 'S') or (data[y-1][x+1] == 'S' and data[y+1][x-1] == 'M')):
+    if not ((data[y-1][x+1], data[y+1][x-1]) in (('M', 'S'), ('S', 'M'))):
         return 0
 
     return 1
@@ -46,7 +46,7 @@ with open("day04.txt", "rt") as fl:
     total_xmas2 = 0
     for x in range(dx):
         for y in range(dy):
-            total_xmas1 += check_xmas(x, y, dx, dy, lines)
+            total_xmas1 += check_xmas1(x, y, dx, dy, lines)
             total_xmas2 += check_xmas2(x, y, dx, dy, lines)
 
     print(total_xmas1, total_xmas2)
