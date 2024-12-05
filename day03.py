@@ -3,9 +3,8 @@ import re
 with open("day03.txt", "rt") as fl:
     data = fl.read()
     re = re.compile(r"mul\((\d+),(\d+)\)|do\(\)|don\'t\(\)", re.MULTILINE)
-    ops = re.findall(data)
 
-    enabled = True
+    enabled = 1
     sum1 = 0
     sum2 = 0
 
@@ -16,9 +15,9 @@ with open("day03.txt", "rt") as fl:
             sum1 += x * y
             sum2 += (x * y) * enabled
         elif op.startswith("do()"):
-            enabled = True
+            enabled = 1
         elif op.startswith("don't()"):
-            enabled = False
+            enabled = 0
         else:
             raise ValueError
 
