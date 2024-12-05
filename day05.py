@@ -37,8 +37,6 @@ def sort_update(update, rules):
 
 
 with open("day05.txt", "rt") as fl:
-    after_n_pages = {}
-    before_n_pages = {}
     rules = []
     while True:
         line = fl.readline().strip()
