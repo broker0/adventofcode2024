@@ -28,7 +28,7 @@ def guard_walk(area, pos):
         unique_pos.add((x, y))
         pos = move_guard(area, pos)
 
-    return len(unique_pos)
+    return len(unique_pos), unique_pos
 
 
 def check_cycle(area, pos):
@@ -55,12 +55,12 @@ with open('day06.txt') as fl:
                 initial_pos.append((x, y, DIRS[c]))
         area.append(line)
 
-print(guard_walk(area, initial_pos[0]))
+total, positions = guard_walk(area, initial_pos[0])
+print(total)
+
 
 cycle_count = sum(
-    check_cycle(area[:y] + [area[y][:x] + '#' + area[y][x + 1:]] + area[y + 1:], initial_pos[0])
-    for y in range(len(area))
-    for x in range(len(area[0])) if area[y][x] == '.'
+    check_cycle(area[:y] + [area[y][:x] + '#' + area[y][x + 1:]] + area[y + 1:], initial_pos[0]) for (x, y) in positions
 )
 
 print(cycle_count)
