@@ -1,4 +1,6 @@
 
+DIRS = {'>': (1, 0), 'v': (0, 1), '<': (-1, 0), '^': (0, -1)}
+
 TURNS = {
     (0, -1): (1, 0),    # N -> E
     (1,  0): (0, 1),    # E -> S
@@ -47,7 +49,6 @@ def check_cycle(area, w, h, pos):
 
 area = set()
 initial_pos = []
-DIRS = {'>': (1, 0), 'v': (0, 1), '<': (-1, 0), '^': (0, -1)}
 
 with open('day06.txt') as fl:
     w, h = 0, 0
@@ -57,7 +58,7 @@ with open('day06.txt') as fl:
             w = max(w, x)
             if c == '#':
                 area.add((x, y))
-            elif c in '>v<^':
+            elif c in DIRS:
                 initial_pos.append((x, y, DIRS[c]))
 
 
