@@ -38,20 +38,12 @@ def sort_update(update, rules):
 
 with open("day05.txt", "rt") as fl:
     rules = []
-    while True:
-        line = fl.readline().strip()
-        if not line:
-            break
-
+    while line := fl.readline().strip():
         a, b = map(int, line.split('|'))
         rules.append((a, b))
 
     updates = []
-    while True:
-        line = fl.readline().strip()
-        if not line:
-            break
-
+    while line := fl.readline().strip():
         pages = list(map(int, line.split(',')))
         updates.append(pages)
 
