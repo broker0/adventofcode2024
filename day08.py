@@ -1,17 +1,16 @@
 import itertools
+from collections import defaultdict
 
 with open('day08.txt') as fl:
-    antennas = {}
-
+    antennas = defaultdict(list)
     w, h = 0, 0
+
     for (y, line) in enumerate(fl):
         h = max(h, y)
         line = line.strip()
         for (x, c) in enumerate(line):
             w = max(w, x)
             if c != '.':
-                if c not in antennas:
-                    antennas[c] = []
                 antennas[c].append((x, y))
 
     antinodes1 = set()
