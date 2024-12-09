@@ -2,9 +2,11 @@ from collections import deque
 
 
 def pack_files1(files: deque, disk_map: list):
+    first_free_pos = disk_map.index(-1)
+
     for (file_id, file_pos, file_size) in reversed(files):
         for i in range(file_size):
-            j = disk_map.index(-1)
+            j = first_free_pos = disk_map.index(-1, first_free_pos)
             if j > file_pos:
                 break
 
@@ -17,7 +19,10 @@ def pack_files2(files: deque, gaps: deque, disk_map: list):
         for i in range(len(gaps)):
             if gaps[i][1] >= file_size and file_pos > gaps[i][0]:
                 gap_pos, gap_size = gaps[i]
-                gaps[i] = (gap_pos+file_size, gap_size-file_size)
+                if gap_size == file_size:
+                    del gaps[i]
+                else:
+                    gaps[i] = (gap_pos+file_size, gap_size-file_size)
 
                 for j in range(file_size):
                     disk_map[gap_pos+j] = disk_map[file_pos+j]
