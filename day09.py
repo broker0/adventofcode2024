@@ -1,7 +1,4 @@
-from collections import deque
-
-
-def pack_files1(files: deque, disk_map: list):
+def pack_files1(files, disk_map):
     first_free_pos = disk_map.index(-1)
 
     for (file_id, file_pos, file_size) in reversed(files):
@@ -14,7 +11,7 @@ def pack_files1(files: deque, disk_map: list):
             disk_map[file_pos+file_size-i-1] = -1
 
 
-def pack_files2(files: deque, gaps: deque, disk_map: list):
+def pack_files2(files, gaps, disk_map):
     for (file_id, file_pos, file_size) in reversed(files):
         for i in range(len(gaps)):
             if gaps[i][1] >= file_size and file_pos > gaps[i][0]:
@@ -34,8 +31,8 @@ def pack_files2(files: deque, gaps: deque, disk_map: list):
 with open('day09.txt') as fl:
     packed_disk_map = fl.readline().strip()
 
-    files = deque()
-    gaps = deque()
+    files = []
+    gaps = []
     position = 0
     disk_map = []
 
