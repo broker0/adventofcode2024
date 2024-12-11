@@ -35,7 +35,7 @@ def check_trails2(terrain, initials):
         tops = 0
         for (dx, dy) in STEPS:
             nx, ny = x+dx, y+dy
-            if (nx, ny) in terrain and terrain[(nx, ny)] == height+1:
+            if terrain.get((nx, ny), None) == height+1:
                 if height+1 == 9:
                     tops += 1
                 else:
@@ -58,6 +58,7 @@ with open('day10.txt', 'rt') as fl:
             terrain[(x, y)] = int(height)
             if height == '0':
                 initials.add((x, y))
+
 
     check_trails1(terrain, initials)
     check_trails2(terrain, initials)
