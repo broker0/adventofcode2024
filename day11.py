@@ -3,7 +3,7 @@ from collections import Counter
 
 def blink(stones):
     new_stones = Counter()
-    for (stone, stone_count) in stones.most_common():
+    for (stone, stone_count) in stones.items():
         if stone == 0:
             new_stones[1] += stone_count
         elif len(str(stone)) % 2 == 0:
@@ -22,7 +22,7 @@ def blinks(stones, count):
     for _ in range(count):
         stones = blink(stones)
 
-    return sum(stone_count for (stone, stone_count) in stones.most_common())
+    return sum(stones.values())
 
 
 with open('day11.txt', 'rt') as fl:
