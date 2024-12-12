@@ -41,12 +41,12 @@ def get_area_and_perimeter(plant_regions):
             curr_area, curr_perimeter = 0, 0
 
             for (x, y) in area:
-                perimeter = 4
+                perimeter = 0
 
                 for (dx, dy) in STEPS:
                     nx, ny = x+dx, y+dy
-                    if (nx, ny) in area:
-                        perimeter -= 1
+                    if (nx, ny) not in area:
+                        perimeter += 1
 
                 curr_area, curr_perimeter = (curr_area+1, curr_perimeter+perimeter)
 
@@ -56,7 +56,6 @@ def get_area_and_perimeter(plant_regions):
 
 
 def get_free_sides(region, x, y):
-    plant = terrain[(x, y)]
     sides = set()
 
     for (i, (dx, dy)) in enumerate(STEPS):
@@ -67,7 +66,7 @@ def get_free_sides(region, x, y):
     return sides
 
 
-def get_area_and_sides(terrain, plant_regions, w, h):
+def get_area_and_sides(plant_regions):
     sides = defaultdict(list)
 
     for plant in plant_regions.keys():
@@ -76,12 +75,9 @@ def get_area_and_sides(terrain, plant_regions, w, h):
             for (x, y) in region:
                 free_sided |= get_free_sides(region, x, y)
 
-            # print(free_sided)
             sections = 0
             if plant == 'S':
                 pass
-
-            # print(plant, free_sided, region, sections)
 
             while free_sided:
                 x, y, side = free_sided.pop()
@@ -96,8 +92,6 @@ def get_area_and_sides(terrain, plant_regions, w, h):
                             free_sided.remove((nx, ny, side))
 
                 sections += 1
-
-            # print(plant, free_sided, region, sections)
 
             sides[plant].append((len(region), sections))
 
@@ -130,5 +124,5 @@ with open('day12.txt') as fl:
     areas_and_perimeters = get_area_and_perimeter(plant_regions)
     print(sum(sum(area * perimeter for (area, perimeter) in areas_and_perimeters[plant]) for plant in areas_and_perimeters.keys()))
 
-    sections = get_area_and_sides(terrain, plant_regions, w, h)
-    print(sum(sum(area * perimeter for (area, perimeter) in sections[plant]) for plant in sections.keys()))
+    sections = get_area_and_sides(plant_regions)
+    print(sum(sum(area * sides for (area, sides) in sections[plant]) for plant in sections.keys()))
