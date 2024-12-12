@@ -14,16 +14,17 @@ def check_trails1(terrain, initials):
             curr_pos = queue.popleft()
             if curr_pos in visited:
                 continue
-            visited.add(curr_pos)
+            else:
+                visited.add(curr_pos)
 
             height = terrain[curr_pos]
             if height == 9:
                 top_reached += 1
-
-            for (dx, dy) in STEPS:
-                npos = (curr_pos[0] + dx, curr_pos[1] + dy)
-                if npos in terrain and terrain[npos] == height + 1:
-                    queue.append(npos)
+            else:
+                for (dx, dy) in STEPS:
+                    npos = (curr_pos[0] + dx, curr_pos[1] + dy)
+                    if npos in terrain and terrain[npos] == height + 1:
+                        queue.append(npos)
 
     print(top_reached)
 
@@ -58,7 +59,6 @@ with open('day10.txt', 'rt') as fl:
             terrain[(x, y)] = int(height)
             if height == '0':
                 initials.add((x, y))
-
 
     check_trails1(terrain, initials)
     check_trails2(terrain, initials)
