@@ -39,7 +39,7 @@ def count_robots(robots, w, h):
     center_y = h // 2
     quadrant = [0, 0, 0, 0]
 
-    for robot in state_after_steps(robots, w, h, 100):
+    for robot in robots:
         x, y = robot.x, robot.y
         if x == center_x or y == center_y:
             continue
@@ -91,9 +91,9 @@ with open('day14.txt') as fl:
         robots.append(robot)
         w, h = max(w, robot.x+1), max(h, robot.y+1)
 
-    quadrants = count_robots(robots, w, h)
+    robots100 = state_after_steps(robots, w, h, 100)
+    quadrants = count_robots(robots100, w, h)
     print(quadrants[0] * quadrants[1] * quadrants[2] * quadrants[3])
-    print(len(robots))
 
     max_neighbors = 0
 
