@@ -46,9 +46,6 @@ def get_solves2(ax, bx, dx, ay, by, dy):
     xgcd = math.gcd(ax, bx)
     ygcd = math.gcd(ay, by)
 
-    dx += 10000000000000
-    dy += 10000000000000
-
     if dx % xgcd:
         return []
 
@@ -76,7 +73,7 @@ with open('day13.txt') as fl:
         if cost := get_solves1(m.ax, m.bx, m.dx, m.ay, m.by, m.dy):
             total_cost1 += cost[0][0]*3+cost[0][1]*1
 
-        if cost := get_solves2(m.ax, m.bx, m.dx, m.ay, m.by, m.dy):
+        if cost := get_solves2(m.ax, m.bx, m.dx+10000000000000, m.ay, m.by, m.dy+10000000000000):
             total_cost2 += cost[0][0]*3+cost[0][1]*1
 
     print(total_cost1, total_cost2)
