@@ -46,8 +46,8 @@ def find_costs(maze, start, initial_dir):
                 dest_cost = curr_cost + 1
                 dest_pos = Position(curr_step.pos.x+STEPS[dest_dir][0], curr_step.pos.y+STEPS[dest_dir][1])
             else:
-                dest_cost = curr_cost + 1000
-                dest_pos = curr_step.pos
+                dest_cost = curr_cost + 1001
+                dest_pos = Position(curr_step.pos.x+STEPS[dest_dir][0], curr_step.pos.y+STEPS[dest_dir][1])
 
             if dest_pos not in maze:
                 continue
@@ -62,27 +62,34 @@ def find_paths(maze, start, end):
     s_to_e = find_costs(maze, start, 1)
     best_cost, best_step = get_best_step(s_to_e, end)
 
-    e_to_s = find_costs(maze, best_step.pos, REV_DIR[best_step.dir])
-    cost = get_best_step(e_to_s, start)
-    print(cost)
+    queue = [(best_cost, best_step)]
+    visited = set()
+    best_path_pos = {best_step.pos}
 
-    cnt = 1
-    for (x, y) in maze:
-        for d_d in range(4):
-            d_step = Step(Position(x, y), d_d)
-            if d_step not in s_to_e:
-                continue
+    while queue:
+        curr_score, curr_step = queue.pop(0)
+        if curr_step in visited:
+            continue
 
-            for d_r in range(4):
-                r_step = Step(Position(x, y), d_r)
-                if r_step not in e_to_s:
+        visited.add(curr_step)
+
+        for (dx, dy) in STEPS.values():
+            npos = Position(curr_step.pos.x+dx, curr_step.pos.y+dy)
+            for d in STEPS.keys():
+                nstep = Step(npos, d)
+                if nstep in visited:
                     continue
 
-                if s_to_e[d_step] + e_to_s[r_step] == best_cost:
-                    # print(d_step, r_step)
-                    cnt += 1
+                if nstep in s_to_e:
+                    nscore = s_to_e[nstep]
+                    if nstep.dir == curr_step.dir and curr_score == nscore + 1:
+                        queue.append((nscore, nstep))
+                        best_path_pos.add(nstep.pos)
+                    elif nstep.dir != curr_step.dir and curr_score == nscore + 1001:
+                        queue.append((nscore, nstep))
+                        best_path_pos.add(nstep.pos)
 
-    return cnt
+    return best_path_pos
 
 
 def get_best_step(costs, pos):
@@ -125,6 +132,5 @@ with open('day16.txt') as fl:
     costs = find_costs(maze, start, 1)   # > direction
     print(get_best_step(costs, end))
 
-    # part 2  is not working yet
-    print(find_paths(maze, start, end))
-
+    tiles = find_paths(maze, start, end)
+    print(len(tiles))
