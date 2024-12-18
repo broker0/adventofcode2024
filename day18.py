@@ -1,4 +1,5 @@
 from collections import deque, namedtuple
+import heapq
 
 STEPS = [
     (0, -1),    # 0 top
@@ -7,7 +8,10 @@ STEPS = [
     (-1, 0),    # 3 left
 ]
 
-StepState = namedtuple("StepState", ["step", "x", "y"])
+
+class StepState(namedtuple("_StepState", ["x", "y", "step", "g", "h", "prev"])):
+    def __lt__(self, other):
+        return (self.g + self.h) < (other.g + other.h)
 
 
 class Memory:
@@ -41,46 +45,59 @@ class Memory:
 
             print()
 
-    def search_path(self, initial):
-        queue = deque([initial])
+    @staticmethod
+    def heuristic(x1, y1, x2, y2):
+        return abs(x1 - x2) + abs(y1 - y2)
+
+    def search_path(self, x, y):
+        # Инициализация
+        heap = []
+        heapq.heappush(heap, StepState(x, y, 0, 0, Memory.heuristic(x, y, self.end_x, self.end_y), None))
         visited = set()
 
-        while queue:
-            curr = queue.popleft()
+        while heap:
+            curr = heapq.heappop(heap)
             if (curr.x, curr.y) in visited:
                 continue
-
-            visited.add((curr.x, curr.y))
+            else:
+                visited.add((curr.x, curr.y))
 
             if (curr.x, curr.y) == (self.end_x, self.end_y):
-                return curr
+                path = []
+                while curr:
+                    path.append((curr.x, curr.y))
+                    curr = curr.prev
+                return path[::-1]
 
             for (dx, dy) in STEPS:
                 nx, ny = curr.x + dx, curr.y + dy
 
                 if 0 <= nx < self.width and 0 <= ny < self.height and (nx, ny) not in self.blocked:
-                    queue.append(StepState(curr.step+1, nx, ny))
+                    g = curr.g + 1
+                    h = Memory.heuristic(nx, ny, self.end_x, self.end_y)
+                    heapq.heappush(heap, StepState(nx, ny, curr.step + 1, g, h, curr))
 
-        return None
+        return []
 
 
 with open('day18.txt') as fl:
     memory = Memory(fl)
 
 
-memory.search_path(StepState(0, memory.start_x, memory.start_y))
-
 for i in range(1024):
     memory.drop_byte(i)
 
+path = memory.search_path(0, 0)
+print(len(path)-1)
 
-res = memory.search_path(StepState(0, memory.start_x, memory.start_y))
-print(res.step)
+path = set(path)
 
 for i in range(1024, len(memory.falling_bytes)):
     memory.drop_byte(i)
-    res = memory.search_path(StepState(0, memory.start_x, memory.start_y))
-    if res is None:
-        x, y = memory.falling_bytes[i]
-        print(f"{x},{y}")
-        break
+    if memory.falling_bytes[i] in path:
+        path = set(memory.search_path(0, 0))
+        if not len(path):
+            x, y = memory.falling_bytes[i]
+            print(f"{x},{y}")
+            break
+
