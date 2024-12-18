@@ -93,9 +93,6 @@ class Computer:
         while self.step():
             pass
 
-    def reset(self):
-        self.ip = 0
-
     def dump(self):
         print(f"IP: {self.ip} A: {self.a}, B: {self.b}, C: {self.c}")
         print(f"output: {",".join(map(str, self.output))}")
@@ -122,10 +119,6 @@ def find_common_positions(lists):
             common_positions.append(i)
 
     return common_positions
-
-
-def find_A(comp, s):
-    comp.reset()
 
 
 with open('day17.txt') as fl:
