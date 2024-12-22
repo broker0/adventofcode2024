@@ -16,10 +16,6 @@ def read_racetrack(filename):
         track = set()
 
         for (y, line) in enumerate(fl):
-            line = line.strip()
-            if not line:
-                break
-
             for (x, tile) in enumerate(line.strip()):
                 if tile != '#':
                     track.add((x, y))
@@ -82,5 +78,5 @@ saves = count_cheats(track, 2)
 print(sum(count for (save, count) in saves.most_common() if save >= 100))
 
 saves = count_cheats(track, 20)
-# dump_save(saves, 0)
+# dump_save(saves, 50)
 print(sum(count for (save, count) in saves.most_common() if save >= 100))
