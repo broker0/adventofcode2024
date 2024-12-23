@@ -12,11 +12,10 @@ with open('day23.txt') as fl:
 triples = set()
 for pc in network:
     neighbours = network[pc]
-    for pc1 in neighbours:
-        for pc2 in neighbours:
-            if pc1 != pc2 and pc2 in network[pc1]:
-                # print(sorted([pc, pc1, pc2]))
-                triples.add(tuple(sorted([pc, pc1, pc2])))
+    for pc1, pc2 in combinations(neighbours, 2):
+        if pc2 in network[pc1]:
+            # print(sorted([pc, pc1, pc2]))
+            triples.add(tuple(sorted([pc, pc1, pc2])))
 
 
 print(sum(1 for triple in triples if any(pc.startswith('t') for pc in triple)))
